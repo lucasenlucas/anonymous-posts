@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berichtenpagina</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Welkom op de berichtenpagina</h1>
+    <button id="googleLoginButton" onclick="googleLogin()">Inloggen met Google</button>
+    <p id="loginStatus">Je bent nog niet ingelogd</p>
+  </header>
+
+  <section id="posts">
+    <h2>Berichten</h2>
+    <!-- Berichten worden hier geladen via JavaScript -->
+  </section>
+
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Laad berichten bij het openen van de homepage
+    loadPosts();
+  </script>
+</body>
+</html>
