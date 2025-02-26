@@ -65,11 +65,13 @@
     <!-- Berichten worden hier geladen via JavaScript -->
   </section>
 
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
+  <!-- Firebase en je JavaScript bestanden -->
+  <script type="module">
+    // Import Firebase SDK-modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+    import { getFirestore, collection, query, orderBy, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 
-  <script>
     // Firebase configuratie
     const firebaseConfig = {
       apiKey: "AIzaSyBHDtBS4Nk7-GUkMaSwqxPst5Lf67zGfSQ",
@@ -80,16 +82,16 @@
       appId: "1:71078745276:web:9ad19f119c50bd788eacb9"
     };
 
-    // Initialiseer Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
     // Google Inloggen
-    const provider = new firebase.auth.GoogleAuthProvider();
+    const provider = new GoogleAuthProvider();
 
     function googleLogin() {
-      auth.signInWithPopup(provider)
+      signInWithPopup(auth, provider)
         .then((result) => {
           const user = result.user;
           document.getElementById("loginStatus").innerHTML = "Ingelogd als: " + user.displayName;
@@ -103,7 +105,8 @@
     // Berichten ophalen
     function loadPosts() {
       const postsDiv = document.getElementById("posts");
-      db.collection("posts").orderBy("timestamp", "desc").get()
+      const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+      getDocs(q)
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
             const data = doc.data();
