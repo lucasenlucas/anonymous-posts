@@ -59,11 +59,12 @@
     <button onclick="postMessage()">Plaats Bericht</button>
   </section>
 
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
+  <script type="module">
+    // Import Firebase SDK-modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 
-  <script>
     // Firebase configuratie
     const firebaseConfig = {
       apiKey: "AIzaSyBHDtBS4Nk7-GUkMaSwqxPst5Lf67zGfSQ",
@@ -75,9 +76,9 @@
     };
 
     // Initialiseer Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
     // Bericht plaatsen
     function postMessage() {
@@ -85,10 +86,10 @@
       const message = document.getElementById("message").value;
 
       if (title && message) {
-        db.collection("posts").add({
+        addDoc(collection(db, "posts"), {
           title: title,
           message: message,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          timestamp: serverTimestamp()
         }).then(() => {
           alert("Bericht geplaatst!");
           window.location.href = 'index.html'; // Terug naar de homepage na plaatsen
